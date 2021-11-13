@@ -2,7 +2,6 @@
 
 namespace WabLab\Library\Sorting\Tests\Integration;
 
-use WabLab\Library\Sorting\BubbleSort;
 use WabLab\Library\Sorting\InsertionSort;
 
 class InsertionSortTest extends AbstractIntegration
