@@ -23,45 +23,117 @@ abstract class AbstractIntegration extends TestCase
         });
     }
 
-    public function testSortingEmptyArray()
+    public function testSortingEmptyArray_ASCOrder_NoKeyPreservation()
     {
         $array = [];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_ASCENDING, false);
+        $this->assertCount(0, $array);
+    }
+    public function testSortingEmptyArray_DESCOrder_NoKeyPreservation()
+    {
+        $array = [];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_DESCENDING, false);
+        $this->assertCount(0, $array);
+    }
+    public function testSortingEmptyArray_ASCOrder_KeyPreservation()
+    {
+        $array = [];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_ASCENDING, true);
+        $this->assertCount(0, $array);
+    }
+
+    public function testSortingEmptyArray_DESCOrder_KeyPreservation()
+    {
+        $array = [];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_DESCENDING, true);
         $this->assertCount(0, $array);
     }
 
-    public function testSortingArray_OneItem()
+
+    public function testSortingArray_OneItem_ASCOrder_NoKeyPreservation()
     {
         $array = [525];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_ASCENDING, false);
+        $this->assertCount(1, $array);
+        $this->assertEquals(525, $array[0]);
+    }
+
+    public function testSortingArray_OneItem_DESCOrder_NoKeyPreservation()
+    {
+        $array = [525];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_DESCENDING, false);
+        $this->assertCount(1, $array);
+        $this->assertEquals(525, $array[0]);
+    }
+
+    public function testSortingArray_OneItem_ASCOrder_KeyPreservation()
+    {
+        $array = [525];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_ASCENDING, true);
+        $this->assertCount(1, $array);
+        $this->assertEquals(525, $array[0]);
+    }
+
+    public function testSortingArray_OneItem_DESCOrder_KeyPreservation()
+    {
+        $array = [525];
         $this->sorter->sort($array, $this->comparer, ISorter::ORDER_DESCENDING, true);
         $this->assertCount(1, $array);
         $this->assertEquals(525, $array[0]);
     }
 
-    public function testSortingArray_TwoItems()
+    public function testSortingArray_TwoItems_Numeric_ASCOrder_NoKeyPreservation()
     {
         $array = [2, 1];
-        $assocArray = ['key1' => 1, 'key2'=> 2];
-
-        //
-        // no key preserving
-        //
         $sortedArray = $this->sorter->sort($array, $this->comparer, ISorter::ORDER_ASCENDING, false);
         $this->assertCount(2, $sortedArray);
         $this->assertEquals(1, $sortedArray[0]);
         $this->assertEquals(2, $sortedArray[1]);
 
+    }
+
+    public function testSortingArray_TwoItems_Numeric_ASCOrder_KeyPreservation()
+    {
+        $array = [2, 1];
+        $sortedArray = $this->sorter->sort($array, $this->comparer, ISorter::ORDER_ASCENDING, true);
+        $this->assertArrayAscSorted($sortedArray);
+        $this->assertCount(2, $sortedArray);
+        $this->assertEquals(2, $sortedArray[0]);
+        $this->assertEquals(1, $sortedArray[1]);
+
+    }
+
+    public function testSortingArray_TwoItems_Numeric_DESCOrder()
+    {
+        $array = [2, 1];
+
+        //
+        // no key preserving
+        //
         $sortedArray = $this->sorter->sort($array, $this->comparer, ISorter::ORDER_DESCENDING, false);
         $this->assertCount(2, $sortedArray);
         $this->assertEquals(2, $sortedArray[0]);
         $this->assertEquals(1, $sortedArray[1]);
 
+        //
+        // preserve keys
+        //
+        $sortedArray = $this->sorter->sort($array, $this->comparer, ISorter::ORDER_DESCENDING, true);
+        $this->assertArrayDescSorted($sortedArray);
+        $this->assertCount(2, $sortedArray);
+        $this->assertEquals(2, $sortedArray[0]);
+        $this->assertEquals(1, $sortedArray[1]);
+
+    }
+
+
+    public function testSortingArray_TwoItems_Associative()
+    {
+        $assocArray = ['key1' => 1, 'key2'=> 2];
+
+        //
+        // no key preserving
+        //
         $sortedArray = $this->sorter->sort($assocArray, $this->comparer, ISorter::ORDER_ASCENDING, false);
         $this->assertCount(2, $sortedArray);
         $this->assertEquals(1, $sortedArray[0]);
@@ -75,19 +147,6 @@ abstract class AbstractIntegration extends TestCase
         //
         // preserve keys
         //
-
-        $sortedArray = $this->sorter->sort($array, $this->comparer, ISorter::ORDER_ASCENDING, true);
-        $this->assertArrayAscSorted($sortedArray);
-        $this->assertCount(2, $sortedArray);
-        $this->assertEquals(2, $sortedArray[0]);
-        $this->assertEquals(1, $sortedArray[1]);
-
-        $sortedArray = $this->sorter->sort($array, $this->comparer, ISorter::ORDER_DESCENDING, true);
-        $this->assertArrayDescSorted($sortedArray);
-        $this->assertCount(2, $sortedArray);
-        $this->assertEquals(2, $sortedArray[0]);
-        $this->assertEquals(1, $sortedArray[1]);
-
         $sortedArray = $this->sorter->sort($assocArray, $this->comparer, ISorter::ORDER_ASCENDING, true);
         $this->assertArrayAscSorted($sortedArray);
         $this->assertCount(2, $sortedArray);
