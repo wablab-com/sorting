@@ -22,18 +22,18 @@ class InsertionSort implements ISorter
 
         for ($seeker = 0; $seeker < $count; $seeker++) {
             $currentValue = $arrayValues[$seeker];
-            if($preserveKeys)
+            if ($preserveKeys)
                 $currentKey = $arrayKeys[$seeker];
             $pairIndex = $seeker - 1;
 
-            while ($pairIndex >= 0 && $comparer->compare($arrayValues[$pairIndex], $currentValue) > 0) {
+            while ($pairIndex >= 0 && (($order == static::ORDER_ASCENDING && $comparer->compare($arrayValues[$pairIndex], $currentValue) > 0) || ($order == static::ORDER_DESCENDING && $comparer->compare($arrayValues[$pairIndex], $currentValue) < 0))) {
                 $arrayValues[$pairIndex + 1] = $arrayValues[$pairIndex];
-                if($preserveKeys)
+                if ($preserveKeys)
                     $arrayKeys[$pairIndex + 1] = $arrayKeys[$pairIndex];
                 $pairIndex--;
             }
             $arrayValues[$pairIndex + 1] = $currentValue;
-            if($preserveKeys)
+            if ($preserveKeys)
                 $arrayKeys[$pairIndex + 1] = $currentKey;
         }
 
