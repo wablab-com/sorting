@@ -12,11 +12,15 @@ abstract class AbstractIntegration extends TestCase
     protected ISorter $sorter;
     protected IComparer $comparer;
 
-    public function __construct(ISorter $sorter, IComparer $comparer, ?string $name = null, array $data = [], $dataName = '')
+    public function __construct(ISorter $sorter, ?string $name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->sorter = $sorter;
-        $this->comparer = $comparer;
+
+        $this->comparer = $this->getMockBuilder(IComparer::class)->getMock();
+        $this->comparer->method('compare')->willReturnCallback(function ($left, $right) {
+            return $left > $right ? 1 : ($right > $left ? -1 : 0);
+        });
     }
 
     public function testSortingEmptyArray()
@@ -146,7 +150,7 @@ abstract class AbstractIntegration extends TestCase
     {
         $preItem = null;
         foreach ($array as $item) {
-            if($this->comparer->compare($preItem, $item) < 0) {
+            if($preItem && $this->comparer->compare($preItem, $item) > 0) {
                 throw new ExpectationFailedException('Failed to assert that array elements are sorted ascending.');
             }
             $preItem = $item;
@@ -158,7 +162,7 @@ abstract class AbstractIntegration extends TestCase
     {
         $preItem = null;
         foreach ($array as $item) {
-            if($this->comparer->compare($preItem, $item) > 0) {
+            if($preItem && $this->comparer->compare($preItem, $item) < 0) {
                 throw new ExpectationFailedException('Failed to assert that array elements are sorted descending.');
             }
             $preItem = $item;
