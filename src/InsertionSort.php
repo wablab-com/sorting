@@ -2,13 +2,13 @@
 
 namespace WabLab\Library\Sorting;
 
-use WabLab\Library\Sorting\Contracts\IComparer;
+use WabLab\Library\Sorting\Contracts\IComparator;
 use WabLab\Library\Sorting\Contracts\ISorter;
 
 class InsertionSort implements ISorter
 {
 
-    public function sort(array $array, IComparer $comparer, string $order = self::ORDER_ASCENDING, $preserveKeys = false): array
+    public function sort(array $array, IComparator $comparator, string $order = self::ORDER_ASCENDING, $preserveKeys = false): array
     {
         $arrayKeys = [];
         $arrayValues = [];
@@ -26,7 +26,7 @@ class InsertionSort implements ISorter
                 $currentKey = $arrayKeys[$seeker];
             $pairIndex = $seeker - 1;
 
-            while ($pairIndex >= 0 && (($order == static::ORDER_ASCENDING && $comparer->compare($arrayValues[$pairIndex], $currentValue) > 0) || ($order == static::ORDER_DESCENDING && $comparer->compare($arrayValues[$pairIndex], $currentValue) < 0))) {
+            while ($pairIndex >= 0 && (($order == static::ORDER_ASCENDING && $comparator->compare($arrayValues[$pairIndex], $currentValue) > 0) || ($order == static::ORDER_DESCENDING && $comparator->compare($arrayValues[$pairIndex], $currentValue) < 0))) {
                 $arrayValues[$pairIndex + 1] = $arrayValues[$pairIndex];
                 if ($preserveKeys)
                     $arrayKeys[$pairIndex + 1] = $arrayKeys[$pairIndex];

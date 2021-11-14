@@ -2,13 +2,13 @@
 
 namespace WabLab\Library\Sorting;
 
-use WabLab\Library\Sorting\Contracts\IComparer;
+use WabLab\Library\Sorting\Contracts\IComparator;
 use WabLab\Library\Sorting\Contracts\ISorter;
 
 class QuickSort implements ISorter
 {
 
-    public function sort(array $array, IComparer $comparer, string $order = self::ORDER_ASCENDING, $preserveKeys = false): array
+    public function sort(array $array, IComparator $comparator, string $order = self::ORDER_ASCENDING, $preserveKeys = false): array
     {
         $arrayKeys = [];
         $arrayValues = [];
@@ -23,29 +23,29 @@ class QuickSort implements ISorter
         if(!$preserveKeys)
             $arrayKeys = null;
 
-        $this->quickSort($arrayValues, 0, $count-1, $comparer, $order, $arrayKeys);
+        $this->quickSort($arrayValues, 0, $count-1, $comparator, $order, $arrayKeys);
 
         if($preserveKeys)
             return array_combine($arrayKeys, $arrayValues);
         return $arrayValues;
     }
 
-    protected function quickSort(array &$arrayValues, int $fromIndex, int $toIndex, IComparer $comparer, string $order, ?array &$arrayKeys = null)
+    protected function quickSort(array &$arrayValues, int $fromIndex, int $toIndex, IComparator $comparator, string $order, ?array &$arrayKeys = null)
     {
         if ($fromIndex < $toIndex) {
-            $pivotIndex = $this->setPivot_MoveMaxAndMin_ToLeftAndRight($arrayValues, $fromIndex, $toIndex, $comparer, $order, $arrayKeys);
+            $pivotIndex = $this->setPivot_MoveMaxAndMin_ToLeftAndRight($arrayValues, $fromIndex, $toIndex, $comparator, $order, $arrayKeys);
 
-            $this->quickSort($arrayValues, $fromIndex, $pivotIndex - 1, $comparer, $order, $arrayKeys);
-            $this->quickSort($arrayValues, $pivotIndex + 1, $toIndex, $comparer, $order, $arrayKeys);
+            $this->quickSort($arrayValues, $fromIndex, $pivotIndex - 1, $comparator, $order, $arrayKeys);
+            $this->quickSort($arrayValues, $pivotIndex + 1, $toIndex, $comparator, $order, $arrayKeys);
         }
     }
 
-    protected function setPivot_MoveMaxAndMin_ToLeftAndRight(array &$arrayValues, int $fromIndex, int $toIndex, IComparer $comparer, string $order, ?array &$arrayKeys = null): int
+    protected function setPivot_MoveMaxAndMin_ToLeftAndRight(array &$arrayValues, int $fromIndex, int $toIndex, IComparator $comparator, string $order, ?array &$arrayKeys = null): int
     {
         $pivotIndex = $toIndex;
         $projectedPivotIndex = $fromIndex - 1;
         for ($seeker = $fromIndex; $seeker < $toIndex; $seeker++) {
-            if ( ($order == static::ORDER_ASCENDING && $comparer->compare($arrayValues[$seeker], $arrayValues[$pivotIndex]) < 0) || ($order == static::ORDER_DESCENDING && $comparer->compare($arrayValues[$seeker], $arrayValues[$pivotIndex]) > 0)) {
+            if ( ($order == static::ORDER_ASCENDING && $comparator->compare($arrayValues[$seeker], $arrayValues[$pivotIndex]) < 0) || ($order == static::ORDER_DESCENDING && $comparator->compare($arrayValues[$seeker], $arrayValues[$pivotIndex]) > 0)) {
                 $projectedPivotIndex++;
                 [$arrayValues[$seeker], $arrayValues[$projectedPivotIndex]] = [$arrayValues[$projectedPivotIndex], $arrayValues[$seeker]];
                 if($arrayKeys)

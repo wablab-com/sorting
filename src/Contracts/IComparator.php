@@ -2,7 +2,7 @@
 
 namespace WabLab\Library\Sorting\Contracts;
 
-interface IComparer
+interface IComparator
 {
     /**
      * @param mixed $left
