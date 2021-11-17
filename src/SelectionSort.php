@@ -33,11 +33,9 @@ class SelectionSort implements ISorter
                 [$arrayKeys[$lowInx], $arrayKeys[$mainInx]] = [$arrayKeys[$mainInx], $arrayKeys[$lowInx]];
         }
 
-
         if ($preserveKeys)
             return array_combine($arrayKeys, $arrayValues);
         return $arrayValues;
     }
-
 
 }
