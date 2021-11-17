@@ -55,7 +55,6 @@ class HeapSort implements ISorter
             if($arrayKeys)
                 [$arrayKeys[$currentInx], $arrayKeys[$largestInx]] = [$arrayKeys[$largestInx], $arrayKeys[$currentInx]];
 
-
             $this->heapify($arrayValues, $count, $largestInx, $comparator, $order, $arrayKeys);
         }
     }
